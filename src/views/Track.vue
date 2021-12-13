@@ -12,8 +12,8 @@
         </div> -->
 
         <!-- Card Stuff -->
-        <div class="card_container">
-            <div class="cards_wrap">     
+        <div class="card_container container-fluid position-relative">
+            <div class="cards_wrap d-flex top-0 overflow-auto">     
                 <div class="card_item" v-for="item in tracks" v-bind:key="item">
                     <div class="card_inner">
                         <div class="card_top">
@@ -26,13 +26,20 @@
                         </div>
                     </div>
                 </div>
+            
             </div>
-            <!-- Scroll Left -->
-            <button class="prev" @mouseover="scroll(-1)" @mouseleave="stopScroll()" >&#10094;</button>
-            <!-- Scroll Right -->
-            <button class="next" @mouseover="scroll(1)" @mouseleave="stopScroll()" >&#10095;</button>
+            <div class="button row justify-content-between w-100 h-100 top-0 gx-0 position-absolute">
+                <div class="col-1">
+                    <!-- Scroll Left -->
+                    <div class="prev" @mouseover="scroll(-1)" @mouseleave="stopScroll()" >&#10094;</div>
+                </div>
+                <div class="col-1">
+                    <!-- Scroll Right -->
+                    <div class="next" @mouseover="scroll(1)" @mouseleave="stopScroll()" >&#10095;</div>
+                </div>
+            </div>
         </div>
-
+    
     </div>
 </template>
 
@@ -133,18 +140,11 @@ img {
 }
 
 .card_container{
-    display: flex;
     align-items: center;
+    padding-right: 0;
+    padding-left: 0;
+    background: black;
 }
-
-.cards_wrap {
-  display: flex;
-  overflow-x: scroll;
-  text-align: center;
-  min-width: 100%;
-  min-height: 200px;
-  -ms-overflow-style: none;
-}      
 
 ::-webkit-scrollbar {
     display: none;
@@ -164,34 +164,40 @@ img {
   width: 100%;
   min-height: 225px;
   padding: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
   padding-bottom: 0;
 }
 
 .cards_wrap .card_bottom {
   text-align: center;
   padding: 15px;
+  background: white;
+}
+
+.button.row {
+    background-color: transparent
 }
 
 .prev, .next {
-  
-  cursor: pointer;
   position: absolute;
-
-
-  /* height: 100%; */
-  width: auto;
-  padding: 16px;
+  width: 100px;
+  height: 100%;
+  padding: 13% 32px 13% 10px;
   color: white;
+  background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(22,22,22,1) 23%, rgba(43,43,43,0) 100%);
   font-weight: bold;
-  font-size: 18px;
+  font-size: 25px;
   transition: 0.6s ease;
-  border-radius: 0 3px 3px 0;
-  user-select: none;
 }
 
 .next {
   right: 0;
-  border-radius: 3px 0 0 3px;
+  padding: 13% 10px 13% 32px;
+  background: linear-gradient(-90deg, rgba(0,0,0,1) 0%, rgba(22,22,22,1) 23%, rgba(43,43,43,0) 100%);
+
+
+
 }
 
 
