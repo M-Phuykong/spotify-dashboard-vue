@@ -6,10 +6,33 @@
         <button @click="getTopTrack(50,'medium_term')">Get Top 50 Track!</button>
         <button @click="getTopTrack(50,'long_term')">Get Top Track! Long Term</button>
         <h2>Top Track:</h2>
-        <div v-for="item in tracks" v-bind:key="item" style="float: left">
+        <!-- <div v-for="item in tracks" v-bind:key="item" style="float: left">
             <img :src="item.album.images[1].url">
             <p>{{ item.name }}</p>
+        </div> -->
+
+        <!-- Card Stuff -->
+        <div class="card_container">
+            <div class="cards_wrap">     
+                <div class="card_item" v-for="item in tracks" v-bind:key="item">
+                    <div class="card_inner">
+                        <div class="card_top">
+                            <img @click="showInfo(item)" :src="item.album.images[0].url">
+                        </div>
+                        <div class="card_bottom">
+                            <div class="card_info">
+                                <h5>{{ item.name }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Scroll Left -->
+            <button class="prev" @mouseover="scroll(-1)" @mouseleave="stopScroll()" >&#10094;</button>
+            <!-- Scroll Right -->
+            <button class="next" @mouseover="scroll(1)" @mouseleave="stopScroll()" >&#10095;</button>
         </div>
+
     </div>
 </template>
 
@@ -22,11 +45,20 @@ export default {
     data() {
         return {
             tracks: [],
-            tracks_img: []
+            isScroll: undefined
         }
     },
     created() {
         this.getTopTrack(25,'medium_term')
+   
+    },
+    mounted() {
+        
+        this.$nextTick(function(){
+          
+
+        })
+        
     },
     methods: {
         getTopTrack: function(limit, time_range){
@@ -51,10 +83,116 @@ export default {
                 Home.methods.fetchRefreshToken()
             })
         },
+        showInfo: function(item){
+            //    window.open(
+            //         item.preview_url,
+            //         '_blank'
+            //         );
+            console.log(item)
+            
+            
+        },
+        scroll: function(number){
+            let content = document.getElementsByClassName("cards_wrap").item(0);
+            this.isScroll = setInterval(() => {
+                content.scrollLeft += (5 * number)
+                
+            },2) 
+            
+        },
+        stopScroll: function(){
+            clearInterval(this.isScroll);
+            this.isScroll = undefined
+        },
+        
     }
 }
+
+
+
 </script>
 
-<style scoped>
+<style>
+
+* {
+  scroll-behavior: auto;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Nunito", sans-serif;
+}
+
+body {
+  background: transparent;
+  font-size: 14px;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.card_container{
+    display: flex;
+    align-items: center;
+}
+
+.cards_wrap {
+  display: flex;
+  overflow-x: scroll;
+  text-align: center;
+  min-width: 100%;
+  min-height: 200px;
+  -ms-overflow-style: none;
+}      
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+.cards_wrap .card_item {
+  min-width: 25%;
+  margin: 5px;
+}
+
+.cards_wrap .card_inner {
+  height: 100%;
+  background: rgb(0, 0, 0);
+}
+
+.cards_wrap .card_top {
+  width: 100%;
+  min-height: 225px;
+  padding: 10px;
+  padding-bottom: 0;
+}
+
+.cards_wrap .card_bottom {
+  text-align: center;
+  padding: 15px;
+}
+
+.prev, .next {
+  
+  cursor: pointer;
+  position: absolute;
+
+
+  /* height: 100%; */
+  width: auto;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
 
 </style>

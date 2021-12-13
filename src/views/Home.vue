@@ -26,14 +26,13 @@ export default {
   created() {
       if (window.location.search.length > 0){
         this.handleRedirect();
-        this.getUser()
       }
       else{
-        this.getUser()
         var refresh_token = localStorage.getItem("refresh_token")
         var access_token = localStorage.getItem("access_token")
         this.$store.commit('setAccessToken', access_token);
         this.$store.commit('setRefreshToken', refresh_token);
+        this.getUser()
       }
   },
   methods: {
@@ -101,6 +100,7 @@ export default {
           localStorage.setItem("refresh_token", data.refresh_token);
           this.$store.commit('setRefreshToken', data.refresh_token);
         }
+        this.getUser()
         
       };
     }
@@ -109,5 +109,11 @@ export default {
 </script>
 
 <style scoped>
+
+img{
+  height: 300px;
+  width: 300px;
+}
+
 
 </style>
