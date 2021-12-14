@@ -135,12 +135,12 @@ body {
 
 img {
   display: block;
-  width: 100%;
+  width: auto;
   height: 100%;
+ 
 }
 
 .card_container{
-    align-items: center;
     padding-right: 0;
     padding-left: 0;
     background: black;
@@ -151,18 +151,20 @@ img {
 }
 
 .cards_wrap .card_item {
-  min-width: 25%;
+  width: auto;
   margin: 5px;
 }
 
 .cards_wrap .card_inner {
   height: 100%;
+  width: auto;
   background: rgb(0, 0, 0);
 }
 
 .cards_wrap .card_top {
-  width: 100%;
-  min-height: 225px;
+  width: auto;
+  height: 500px;
+
   padding: 10px;
   padding-left: 0px;
   padding-right: 0px;
@@ -170,18 +172,26 @@ img {
 }
 
 .cards_wrap .card_bottom {
+  height: 100px;
   text-align: center;
   padding: 15px;
   background: white;
 }
 
 .button.row {
-    background-color: transparent
+    background-color: transparent;
+    pointer-events: none; 
+}
+
+.col-1{
+  pointer-events:auto;
 }
 
 .prev, .next {
-  position: absolute;
-  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   height: 100%;
   padding: 13% 32px 13% 10px;
   color: white;
@@ -195,9 +205,6 @@ img {
   right: 0;
   padding: 13% 10px 13% 32px;
   background: linear-gradient(-90deg, rgba(0,0,0,1) 0%, rgba(22,22,22,1) 23%, rgba(43,43,43,0) 100%);
-
-
-
 }
 
 
