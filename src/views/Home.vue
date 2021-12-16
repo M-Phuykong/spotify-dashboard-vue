@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid text-center" id="home">
-    
+    <Header></Header>
     <h1> Home Page</h1>
     <h2>{{user.display_name}}</h2>
     <img :src="user.images[0].url">
@@ -11,12 +11,14 @@
 </template>
 
 <script>
+
 import axios from 'axios'
+import Header from './Header.vue'
 
 export default {
   name: 'Home',
   components: {
-    
+      Header
   },
   data(){
     return {

@@ -1,30 +1,39 @@
 <template>
     <div id="Track">
-        <h1>Track Page</h1>
-        <button @click="getTopTrack(10,'medium_term')">Get Top 10 Track!</button>
+        <Header></Header>
+
+        <button @click="getTopTrack(10,'medium_term')">Get Top 10 Track! &#9196;</button>
         <button @click="getTopTrack(25,'short_term')">Get Top 25 Track!</button>
         <button @click="getTopTrack(50,'medium_term')">Get Top 50 Track!</button>
         <button @click="getTopTrack(50,'long_term')">Get Top Track! Long Term</button>
-        <h2>Top Track:</h2>
-        <!-- <div v-for="item in tracks" v-bind:key="item" style="float: left">
-            <img :src="item.album.images[1].url">
-            <p>{{ item.name }}</p>
-        </div> -->
+        <h1>{{scrollX}}</h1>
 
+
+        <div class="top_track_title_container container-fluid d-flex justify-content-center">
+            <div class="top_track_inner_container d-flex">
+                <div class="emoji_downward">&#9196;</div>
+                <div class="title"><h1>Top {{ track_count }} Tracks</h1></div>
+                <div class="emoji_downward">&#9196;</div>
+            </div>
+        </div>
         <!-- Card Stuff -->
-        <div class="card_container container-fluid position-relative">
+        <div class="card_container container-fluid position-relative ">
             <div class="cards_wrap d-flex top-0 overflow-auto">     
-                <div class="card_item" v-for="item in tracks" v-bind:key="item">
-                    <div class="card_inner">
-                        <div class="card_top">
+                <div class="card_item" v-for="(item,index) in tracks" :key="`${index} - ${item.id}`">
+                    <div class="card_inner position-relative">
+                        <div class="card_top d-flex top-0">
                             <img @click="showInfo(item)" :src="item.album.images[0].url">
                         </div>
-                        <div class="card_bottom">
+                        <div class="card_bottom w-100 h-100 top-0 gx-0 position-absolute">
                             <div class="card_info">
-                                <h5>{{ item.name }}</h5>
+                                {{ item.name }}
                             </div>
                         </div>
+                        <div class="card_back">
+
+                        </div>
                     </div>
+
                 </div>
             
             </div>
@@ -46,24 +55,29 @@
 <script>
 import axios from 'axios';
 import Home from './Home.vue'
+import Header from './Header.vue'
 
 export default {
     name: 'Track',
+    components: {
+        Header
+    },
     data() {
         return {
             tracks: [],
-            isScroll: undefined
+            tmptracks: [],
+            isScroll: undefined,
+            scrollX: 0,
+            track_count: 20,
         }
     },
-    created() {
-        this.getTopTrack(25,'medium_term')
-   
+    beforeMount() {
+        this.getTopTrack(20,'medium_term')
     },
     mounted() {
         
         this.$nextTick(function(){
-          
-
+            this.getNextTrack()
         })
         
     },
@@ -78,11 +92,12 @@ export default {
             axios.get( url , {headers: header})
             .then(response => {
                 if (response.status == 200){
-                    this.tracks = response.data.items
-                    for (var track of response.data.items){
-                        this.tracks_img.push(track.album.images[1])
-                    }
                     
+                    this.tracks = response.data.items;
+                    this.tmptracks = response.data.items;
+    
+                    
+                        
                     // console.log(response.data.items[0])
                 }
             })
@@ -103,7 +118,7 @@ export default {
             let content = document.getElementsByClassName("cards_wrap").item(0);
             this.isScroll = setInterval(() => {
                 content.scrollLeft += (5 * number)
-                
+
             },2) 
             
         },
@@ -111,6 +126,26 @@ export default {
             clearInterval(this.isScroll);
             this.isScroll = undefined
         },
+        getNextTrack: function(){
+            let content = document.getElementsByClassName("cards_wrap").item(0);
+            content.onscroll = () =>{ 
+                this.scrollX = content.scrollWidth - content.scrollLeft - content.clientWidth;
+                var endOfScroll= Math.round(content.scrollWidth - content.scrollLeft - content.clientWidth) === 0;
+                if (endOfScroll){
+                    var newTrack = this.tracks.concat(this.tmptracks);
+                    if (newTrack.length > this.tmptracks.length * 2){
+                        newTrack = [];
+                        newTrack = this.tmptracks;
+                    }
+                    this.tracks = [];
+                    this.tracks = newTrack;
+
+
+
+                }
+            }
+            
+        }
         
     }
 }
@@ -121,11 +156,19 @@ export default {
 
 <style>
 
+html{
+    background-color: black;
+}
+
+h1, h2 {
+    color: #1db954;
+}
+
 * {
   scroll-behavior: auto;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Nunito", sans-serif;
+
 }
 
 body {
@@ -133,17 +176,39 @@ body {
   font-size: 14px;
 }
 
+
+.top_track_inner_container:hover > .emoji_downward{
+    animation: arrow_pointing 250ms;
+    animation-timing-function: cubic-bezier(.2, .65, .6, 1);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+
+}
+
+.top_track_title_container .top_track_inner_container .emoji_downward{
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    margin-left: 10px;
+    font-size: 1.5rem;
+    transition: transform 250ms;
+
+}
+
 img {
   display: block;
   width: auto;
   height: 100%;
- 
+  /* border-start-start-radius: 10px;
+  border-start-end-radius: 10px; */
+  border-radius: 10px;
 }
 
 .card_container{
     padding-right: 0;
     padding-left: 0;
     background: black;
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar {
@@ -152,35 +217,44 @@ img {
 
 .cards_wrap .card_item {
   width: auto;
-  margin: 5px;
+  margin: 10px;
 }
 
 .cards_wrap .card_inner {
   height: 100%;
   width: auto;
   background: rgb(0, 0, 0);
+
 }
 
 .cards_wrap .card_top {
   width: auto;
   height: 500px;
-
   padding: 10px;
   padding-left: 0px;
   padding-right: 0px;
   padding-bottom: 0;
+
+  
 }
 
 .cards_wrap .card_bottom {
   height: 100px;
+  width: auto;
   text-align: center;
-  padding: 15px;
-  background: white;
+  background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(22,22,22,0.7251050933068539) 20%, rgba(43,43,43,0) 72%);
+}
+
+.card_info{
+    margin-top: 25rem;
+    font-size: 25px;
+    color: white;
 }
 
 .button.row {
     background-color: transparent;
-    pointer-events: none; 
+    pointer-events: none;
+    border-radius: 10px; 
 }
 
 .col-1{
@@ -194,7 +268,7 @@ img {
 
   height: 100%;
   padding: 13% 32px 13% 10px;
-  color: white;
+  color: #1DB954;
   background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(22,22,22,1) 23%, rgba(43,43,43,0) 100%);
   font-weight: bold;
   font-size: 25px;
@@ -205,6 +279,16 @@ img {
   right: 0;
   padding: 13% 10px 13% 32px;
   background: linear-gradient(-90deg, rgba(0,0,0,1) 0%, rgba(22,22,22,1) 23%, rgba(43,43,43,0) 100%);
+}
+
+@keyframes arrow_pointing {
+    0% {
+        transform: translateY(0px);
+    }
+    100% {
+        transform: translateY(-5px);
+    }
+
 }
 
 
