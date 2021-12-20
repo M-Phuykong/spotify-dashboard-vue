@@ -1,12 +1,13 @@
 <template>
-  <div class="container-fluid text-center" id="home">
-    <Header></Header>
-    <h1> Home Page</h1>
-    <h2>{{user.display_name}}</h2>
-    <img :src="user.images[0].url">
-    <h3>{{user.country}}</h3>
-    <h3>{{user.uri}}</h3>
+  <div class="home">
+      <Header></Header>
+      <h1> Home Page</h1>
+      <h2>{{user.display_name}}</h2>
+      <img :src="user.images[0].url">
+      <h3>{{user.country}}</h3>
+      <h3>{{user.uri}}</h3>
 
+      <Footer></Footer>
   </div>
 </template>
 
@@ -14,11 +15,14 @@
 
 import axios from 'axios'
 import Header from './Header.vue'
+import Footer from './Footer.vue'
+
 
 export default {
   name: 'Home',
   components: {
-      Header
+      Header,
+      Footer
   },
   data(){
     return {

@@ -6,7 +6,24 @@
         <button @click="getTopTrack(25,'short_term')">Get Top 25 Track!</button>
         <button @click="getTopTrack(50,'medium_term')">Get Top 50 Track!</button>
         <button @click="getTopTrack(50,'long_term')">Get Top Track! Long Term</button>
-        <h1>{{scrollX}}</h1>
+        <div class="track_configure_container container-fluid d-flex justify-content-center">
+
+            <h2>Top&nbsp;</h2>
+            <input type="text" placeholder="1️⃣ - 5️⃣0️⃣" id="num_of_tracks_input" name="num_of_tracks_input" required>
+            <h2>&nbsp;Tracks Within&nbsp;</h2>
+            <select name="length_selector" id="length_selector">
+                <option value="short_term">A Month</option>
+                <option value="medium_term">The Last 6 Months</option>
+                <option value="full_term">The Whole Lifetime</option>
+            </select>
+
+
+
+
+
+
+
+        </div>
 
 
         <div class="top_track_title_container container-fluid d-flex justify-content-center">
@@ -22,16 +39,22 @@
                 <div class="card_item" v-for="(item,index) in tracks" :key="`${index} - ${item.id}`">
                     <div class="card_inner position-relative">
                         <div class="card_top d-flex top-0">
-                            <img @click="showInfo(item)" :src="item.album.images[0].url">
+                            <img :src="item.album.images[0].url">
                         </div>
-                        <div class="card_bottom w-100 h-100 top-0 gx-0 position-absolute">
-                            <div class="card_info">
-                                {{ item.name }}
+
+                        <div @click="showInfo(item)" class="card_bottom w-100 h-100 top-0 gx-0 position-absolute justify-content-center">
+                            <div class="container_bottom position-relative">
+                                <div class="card_title">
+                                    {{ item.name }} 
+                                </div>
+                                <div class="card_subtitle d-flex w-100 position-absolute top-50 justify-content-center">
+                                    |<div class="artist_name" v-for="(artist,index) in item.artists" :key="`${index} - ${item.id}`" >
+                                        &nbsp;{{artist.name}} |
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="card_back">
 
-                        </div>
                     </div>
 
                 </div>
@@ -49,6 +72,7 @@
             </div>
         </div>
     
+        <Footer></Footer>
     </div>
 </template>
 
@@ -56,11 +80,13 @@
 import axios from 'axios';
 import Home from './Home.vue'
 import Header from './Header.vue'
+import Footer from './Footer.vue'
 
 export default {
     name: 'Track',
     components: {
-        Header
+        Header,
+        Footer
     },
     data() {
         return {
@@ -95,10 +121,7 @@ export default {
                     
                     this.tracks = response.data.items;
                     this.tmptracks = response.data.items;
-    
-                    
-                        
-                    // console.log(response.data.items[0])
+                    this.track_count = limit;
                 }
             })
             .catch(() =>{
@@ -110,6 +133,7 @@ export default {
             //         item.preview_url,
             //         '_blank'
             //         );
+            
             console.log(item)
             
             
@@ -119,7 +143,7 @@ export default {
             this.isScroll = setInterval(() => {
                 content.scrollLeft += (5 * number)
 
-            },2) 
+            },5) 
             
         },
         stopScroll: function(){
@@ -215,6 +239,7 @@ img {
     display: none;
 }
 
+
 .cards_wrap .card_item {
   width: auto;
   margin: 10px;
@@ -243,15 +268,81 @@ img {
   width: auto;
   text-align: center;
   background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(22,22,22,0.7251050933068539) 20%, rgba(43,43,43,0) 72%);
+    
 }
 
-.card_info{
-    margin-top: 25rem;
-    font-size: 25px;
-    color: white;
+
+/* Hover Card Animation */
+
+.cards_wrap .card_bottom:hover > .container_bottom .card_title {
+
+  transform: translateY(-80%);
+  opacity: 1;
 }
+
+.cards_wrap .card_bottom:hover > .container_bottom .card_title::after {
+
+  transform: scale(1);
+  opacity: 1;
+  transition-delay: .1s;
+  transition-duration: .2s;
+  
+}
+
+
+.cards_wrap .card_bottom:hover > .container_bottom .card_subtitle {
+  transform: translateY(-55%);
+  opacity: 0.9;
+  transition-delay: .15s;
+  transition-duration: .2s;
+   
+}
+
+
+.container_bottom .card_title{
+    opacity: 0.6;
+    letter-spacing: 1.5px;
+    margin-top: 26rem;
+    font-size: 150%;
+    color: white;
+    text-transform: uppercase;
+    transition: 300ms;
+
+}
+
+.container_bottom .card_title::after{
+    display: block;
+    margin: 1% auto 2% ;
+    width: 60%;
+    height: 1px;
+    content: "";
+    background-color: #fff;
+    opacity: .5;
+    transform: scale(0);
+    transition: transform .15s;
+
+}
+
+.container_bottom .card_subtitle{
+    font-size: 100%;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: 100ms;
+    color: white;
+    padding-top: 2%;
+}
+
+/* Hover Card Animation End */
+
+.cards_wrap .card_back{
+   
+}
+
+
 
 .button.row {
+    line-height: 1px;
     background-color: transparent;
     pointer-events: none;
     border-radius: 10px; 

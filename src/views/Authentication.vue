@@ -1,15 +1,17 @@
 <template>
-  <div id="Authentication">
-    <button id="AuthenticateBttn" v-on:click="requestAuthorization"> Get Authentication Spotify</button>
+  <div class="authentication">
+    <button class="authenticateBttn" v-on:click="requestAuthorization"> Get Authentication Spotify</button>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
+import Footer from './Footer.vue'
 
 export default {
   name: 'Authentication',
   components: {
-    
+    Footer,
   },
   methods: {
       requestAuthorization: function () {
@@ -27,11 +29,15 @@ export default {
 </script>
 
 <style scoped>
-#Authentication{
+
+.authentication{
+  margin-top: 300px;
   text-align: center;
+  align-items: center;
+  align-content: center;
 }
 
-#AuthenticateBttn{
+.authentication button{
     color: green;
     height: 100px;
     width: 200px;
