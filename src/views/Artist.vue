@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="Artist">
         <Header></Header>
 
         <h1>Artist Page</h1>
@@ -24,5 +24,11 @@ export default {
 </script>
 
 <style scoped>
+
+#Artist{
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
 </style>

@@ -1,6 +1,9 @@
 <template>
-  <div class="authentication">
-    <button class="authenticateBttn" v-on:click="requestAuthorization"> Get Authentication Spotify</button>
+  <div id="Authentication">
+    <div class="authentication">
+      <button class="authenticateBttn" v-on:click="requestAuthorization"> Get Authentication Spotify</button>
+    </div>
+
     <Footer></Footer>
   </div>
 </template>
@@ -29,6 +32,13 @@ export default {
 </script>
 
 <style scoped>
+
+#Authentication{
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 
 .authentication{
   margin-top: 300px;

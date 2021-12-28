@@ -1,5 +1,5 @@
 <template>
-    <div class="footer container-fluid text-center position-absolute bottom-0">
+    <div class="footer container-fluid mt-auto text-center">
 
         <p style="color: white;">© {{currDate}} Phuykong Meng. Powered by Vue JS. Coded with ❤.</p>
 
@@ -30,6 +30,7 @@ export default {
 <style scoped>
 
 .footer {
+
     font-family: 'Courier New', Courier, monospace;
     font-size: 1rem;
     padding-bottom: 5px;
