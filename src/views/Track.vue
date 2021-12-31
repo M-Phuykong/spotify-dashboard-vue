@@ -2,10 +2,6 @@
   <div id="Track">
     <Header></Header>
 
-    <!-- <button @click="getTopTrack(20,'medium_term')">Get Top 10 Track! &#9196;</button>
-        <button @click="getTopTrack(25,'short_term')">Get Top 25 Track!</button>
-        <button @click="getTopTrack(50,'medium_term')">Get Top 50 Track!</button>
-        <button @click="getTopTrack(50,'long_term')">Get Top Track! Long Term</button> -->
     <div class="track_configure_container container-fluid">
       <div class="top_container d-flex justify-content-center">
         <h2>Top&nbsp;</h2>
@@ -243,6 +239,7 @@ export default {
   },
 };
 </script>
+
 
 <style>
 

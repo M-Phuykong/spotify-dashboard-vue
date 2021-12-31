@@ -1,20 +1,6 @@
 <template>
   <div id="Home">
     <Header></Header>
-<!-- 
-    <div class="container">
-      <div class="screen">
-        <div class="screen_header"></div>
-        <div class="screen_body h-100"> -->
-          <!-- <img :src="user.images[0].url" /> -->
-          <!-- <h2>{{ user.display_name }}</h2>
-          <h2>{{ user.email }}</h2>
-          <h2>{{ user.country }}</h2>
-          <h2>{{ user.external_urls.spotify }}</h2>
-        </div>
-      </div>
-    </div> -->
-
   
     <div class="profile_card">
       <img :src="user.images[0].url" />
@@ -196,12 +182,17 @@ img {
   border-radius: 5px;
   overflow: hidden;
   position: relative;
+  vertical-align: middle;
   margin: 10px auto;
   margin-top: 8vh;
-  cursor: pointer;
+  border: rgb(223, 223, 5, 0.5) solid 1px;
+  /* cursor: pointer; */
 }
 
+
+
 .profile_card img{
+  opacity: 90%;
   transition: all 0.15s linear;
 }
 
@@ -213,7 +204,6 @@ img {
   font-weight: bold;
   color: #FFF;
   padding: 15px 20px 5px;
-  background: linear-gradient(140deg, rgba(0, 0, 0, 0.4) 50%, rgba(255, 255, 0, 0) 50%);
   transition: all 0.15s linear;
 }
 
