@@ -3,6 +3,7 @@
 
         <p style="color: white;">© {{currDate}} Phuykong Meng. Powered by Vue JS. Coded with ❤.</p>
 
+        
     </div>
 </template>
 
@@ -34,6 +35,7 @@ export default {
     font-family: 'Courier New', Courier, monospace;
     font-size: 1rem;
     padding-bottom: 5px;
+    padding-top: 2%;
 }
 
 </style>

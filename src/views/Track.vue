@@ -6,24 +6,24 @@
       <div class="top_container d-flex justify-content-center">
         <h2>Top&nbsp;</h2>
 
-        <div class="form_group">
+        <div class="track_group_form">
           <input
-            class="num_of_tracks_input h-100"
-            placeholder="1-50"
-            id="num_of_tracks_input"
+            class="num_of_track_input h-100"
             type="text"
+            autocomplete="off"
             v-model="num_of_track"
-            name="num_of_tracks_input"
-            pattern="([1-9]|[1-4][0-9]|50)"
+            name="num_of_track_input"
+            pattern="^$|([1-9]|[1-4][0-9]|50)"
             required
           />
-          <label class="form_label" for="num_of_tracks_input"
+          <span class="bar"></span>
+          <label class="track_label" for="num_of_track_input"
             ># of Tracks (1-50)</label
           >
         </div>
 
         <h2>&nbsp;Tracks Within&nbsp;</h2>
-        <select name="length_selector" id="length_selector">
+        <select name="track_length_selector" id="track_length_selector">
           <option value="short_term">A Month</option>
           <option selected value="medium_term">The Last 6 Months</option>
           <option value="long_term">The Whole Lifetime</option>
@@ -35,7 +35,7 @@
           class="search_button"
           @click="getTopTrack(num_of_track, period)"
         >
-          Push it!
+          Retreive My Result!
         </button>
       </div>
     </div>
@@ -58,7 +58,62 @@
     </div>
     <!-- Card Stuff -->
     <div class="card_container container-fluid position-relative">
-      <div class="cards_wrap d-flex top-0 overflow-auto">
+      <div v-if="track_count < 4">
+        <div
+          class="cards_wrap d-flex top-0 overflow-auto justify-content-center"
+        >
+          <div
+            class="card_item"
+            v-for="(item, index) in tracks"
+            :key="`${index} - ${item.id}`"
+          >
+            <div class="card_inner position-relative">
+              <div class="card_top d-flex top-0">
+                <img :src="item.album.images[0].url" />
+              </div>
+
+              <div
+                @click="showInfo(item)"
+                class="
+                  card_bottom
+                  w-100
+                  h-100
+                  top-0
+                  gx-0
+                  position-absolute
+                  justify-content-center
+                "
+              >
+                <div class="container_bottom position-relative">
+                  <div class="card_title">
+                    {{ item.name }}
+                  </div>
+                  <div
+                    class="
+                      card_subtitle
+                      d-flex
+                      w-100
+                      position-absolute
+                      top-50
+                      justify-content-center
+                    "
+                  >
+                    |
+                    <div
+                      class="artist_name"
+                      v-for="(artist, index) in item.artists"
+                      :key="`${index} - ${item.id}`"
+                    >
+                      &nbsp;{{ artist.name }} |
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-else class="cards_wrap d-flex top-0 overflow-auto">
         <div
           class="card_item"
           v-for="(item, index) in tracks"
@@ -108,8 +163,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div
+
+        <div
         class="
           button
           row
@@ -134,6 +189,8 @@
           </div>
         </div>
       </div>
+      </div>
+
     </div>
 
     <Footer></Footer>
@@ -170,9 +227,9 @@ export default {
     this.$nextTick(function () {
       // this.getNextTrack();
 
-      var length_selector = document.getElementById("length_selector");
-      length_selector.addEventListener("change", () => {
-        this.period = length_selector.value;
+      var track_length_selector = document.getElementById("track_length_selector");
+      track_length_selector.addEventListener("change", () => {
+        this.period = track_length_selector.value;
       });
     });
   },
@@ -242,8 +299,7 @@ export default {
 
 
 <style>
-
-#Track{
+#Track {
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -271,46 +327,74 @@ body {
 
 /* Track Input CSS Part */
 
-.form_group {
+.track_group_form {
   position: relative;
-  /* padding: 15px 0 0 ; */
-  /* margin-top: 10px; */
-  width: 10%;
-  
 }
 
-.num_of_tracks_input {
-  color: white;
-  width: 100%;
-  border: 0;
-  border-bottom: 2px solid gold;
-  outline: 0;
-  /* padding: 7px 0; */
-  background: transparent;
-}
-
-.num_of_tracks_input::placeholder {
-  color: transparent;
-}
-
-.num_of_tracks_input:placeholder-shown + .form_label {
-  cursor: text;
-  top: 20px;
-  transition-duration: 0.3s;
-}
-
-.form_label {
-  position: absolute;
-  top: -10px;
+.num_of_track_input {
+  padding: 10px 10px 10px 5px;
   display: block;
+  width: 150px;
+  border: none;
+  border-bottom: 1px solid #757575;
+  background: transparent;
   color: white;
-  transition-duration: 0.3s;
-  
+  font-size: 1.2rem;
 }
 
-/* #num_of_tracks_input:invalid{
-    border: red solid 3px;
-} */
+.num_of_track_input:focus {
+  outline: none;
+}
+
+/* Label */
+.track_label {
+  color: #999;
+  font-size: 15px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  transition: 0.2s ease all;
+}
+
+/* Active State */
+.num_of_track_input:focus ~ .track_label,
+.num_of_track_input:valid ~ .track_label {
+  top: -20px;
+  font-size: 14px;
+  color: #35af35;
+}
+
+/* Bottom Bar */
+.bar {
+  position: relative;
+  display: block;
+  width: 150px;
+}
+
+.bar::before,
+.bar::after {
+  content: "";
+  height: 2px;
+  width: 0;
+  bottom: 1px;
+  position: absolute;
+  background: #35af35;
+  transition: 0.2s ease all;
+}
+
+.bar:before {
+  left: 50%;
+}
+.bar:after {
+  right: 50%;
+}
+
+.num_of_track_input:focus ~ .bar:before,
+.num_of_track_input:focus ~ .bar:after {
+  width: 50%;
+}
 
 /* End */
 
@@ -391,6 +475,10 @@ img {
   );
 }
 
+#track_length_selector {
+  margin: 0;
+}
+
 /* Hover Card Animation */
 
 .cards_wrap .card_bottom:hover > .container_bottom .card_title {
@@ -444,10 +532,7 @@ img {
   padding-top: 2%;
 }
 
-/* Hover Card Animation End */
-
-.cards_wrap .card_back {
-}
+/* End */
 
 .button.row {
   line-height: 1px;
@@ -469,12 +554,7 @@ img {
   height: 100%;
   padding: 13% 32px 13% 10px;
   color: #1db954;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(22, 22, 22, 1) 23%,
-    rgba(43, 43, 43, 0) 100%
-  );
+  background: linear-gradient(90deg, rgba(0,0,0,0.8690828382134104) 0%, rgba(43,43,43,0) 78%);
   font-weight: bold;
   font-size: 25px;
   transition: 0.6s ease;
@@ -483,12 +563,7 @@ img {
 .next {
   right: 0;
   padding: 13% 10px 13% 32px;
-  background: linear-gradient(
-    -90deg,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(22, 22, 22, 1) 23%,
-    rgba(43, 43, 43, 0) 100%
-  );
+  background: linear-gradient(-90deg, rgba(0,0,0,0.8690828382134104) 0%, rgba(43,43,43,0) 78%);
 }
 
 @keyframes arrow_pointing {
