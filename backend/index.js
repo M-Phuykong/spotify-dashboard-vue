@@ -23,8 +23,7 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
   res.set('Access-Control-Allow-Origin', '*')
   
-//   let code = qs.stringify(req.query)
-  callAuthorizationApi()
+  callAuthorizationApi(qs.stringify(req.query))
   .then(respond => res.send(respond))
   // console.log(code_object)
   // res.send(code_object)
@@ -34,9 +33,11 @@ app.get('/user', (req, res) => {
   res.set('Access-Control-Allow-Origin', '*')
   
   getUser(qs.stringify(req.query))
-  .then(respond => console.log(respond))
-
-
+  .then(response => {
+    if (response.status == 200) {
+        res.send(response.data)
+    }
+  })
 
 })
 
@@ -44,66 +45,42 @@ app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
 
-function fetchAccessToken(code) {
-
-      let body = "grant_type=authorization_code";
-      body += "&code=" + code;
-      body += "&redirect_uri=" + encodeURI("http://localhost:8080/home");
-      body += "&client_id=" + process.env.client_id;
-      body += "&client_secret=" + process.env.client_secret;
-      
-}
 
 async function getUser(access_token){
 
-  // const header = {
-  //     "Content-Type": "application/json",
-  //     Authorization: "Bearer " + access_token
-  //   };
-
-  var url = "https://api.spotify.com/v1/me";
+    const header = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token.slice(0,-1),
+    };
+    var url = `https://api.spotify.com/v1/me`;
   
   try {
-      const response = await axios.get(url, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${access_token}`
-          }
-      });
+      const response = await axios.get(url, { headers: header });
 
-      console.log(response)
-
-
-      return response.data
+      return response
   }
   catch (err){
       console.error(err);
   }
   
-  
-
-
-
-
 }
 
 
 
-async function callAuthorizationApi(){
+async function callAuthorizationApi(code){
 
   const headers = {
       headers: {
           Accept: 'application/json',
           'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      auth: {
-          username: process.env.client_id,
-          password: process.env.client_secret,
+          Authorization: 'Basic NjdkNTI1ZWQ1NjJkNDhkYTg2YjM5ZTRhMTBmNDhjNmY6YjY4MDIwZjhjZDA2NDJlOWE2MzEyYmJmYzFhYmU0NTA='
       },
   };
 
   const data = {
-      grant_type: 'client_credentials',
+      code : code.slice(0,-1),
+      redirect_uri: encodeURI(home_uri),
+      grant_type: 'authorization_code',
   };
 
   try {
@@ -115,7 +92,7 @@ async function callAuthorizationApi(){
     return res.data
   }
   catch (err) {
-        console.error(err);
+      console.error(err);
   }
 
 }
