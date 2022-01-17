@@ -26,27 +26,23 @@
 
 <script>
 import Footer from "./Footer.vue";
+import axios from "axios";
 
 export default {
   name: "Authentication",
   components: {
     Footer,
   },
+
   methods: {
     requestAuthorization: function () {
-      let url = "https://accounts.spotify.com/authorize";
-      url += "?client_id=" + this.$client_id;
-      url += "&response_type=code";
-      url += "&redirect_uri=" + encodeURI(this.$home_uri);
-      url += "&show_dialog=true";
-      url += "&scope=user-read-private user-top-read user-read-email";
-      window.location.href = url;
+      axios("http://localhost:3000/").then((response) => {
+        window.location.href = response.data;
+      });
     },
   },
 };
 </script>
-
-
 
 <style scoped>
 #Authentication {
