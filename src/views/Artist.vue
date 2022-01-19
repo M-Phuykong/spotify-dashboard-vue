@@ -2,8 +2,6 @@
   <div id="Artist">
     <Header></Header>
 
-    
-
     <div class="artist_configure_container container-fluid">
       <div class="top_container d-flex justify-content-center">
         <h2>Top&nbsp;</h2>
@@ -33,12 +31,11 @@
       </div>
 
       <div class="botton_container d-flex justify-content-center">
-        
         <button
           class="search_button"
           @click="getTopTrack(num_of_artist, period)"
         >
-        Retreive My Result!
+          Retreive My Result!
         </button>
       </div>
     </div>
@@ -62,39 +59,40 @@
     <!-- Card Stuff -->
     <div class="artist_card_container container-fluid position-relative">
       <div v-if="artist_count < 4">
-          <div class="artist_cards_wrap d-flex overflow-auto justify-content-center">
-              <div class="card_item"
-              v-for="(item, index) in artists"
-              :key="`${index} - ${item.id}`">
-
-                  <div class="card_inner position-relative">
-                    <div class="card_top d-flex-top-0">
-                      <img :src="item.images[0].url" />
-                    </div>
-
-                    <div
-                      @click="showInfo(item)"
-                      class="
-                        card_bottom
-                        w-100
-                        h-100
-                        top-0
-                        gx-0
-                        position-absolute
-                        justify-content-center
-                      "
-                    >
-                      <div class="container_bottom position-relative">
-                        <div class="artist card_title">
-                          {{ item.name }}
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-
+        <div
+          class="artist_cards_wrap d-flex overflow-auto justify-content-center"
+        >
+          <div
+            class="card_item"
+            v-for="(item, index) in artists"
+            :key="`${index} - ${item.id}`"
+          >
+            <div class="card_inner position-relative">
+              <div class="card_top d-flex-top-0">
+                <img :src="item.images[0].url" />
               </div>
+
+              <div
+                @click="showInfo(item)"
+                class="
+                  card_bottom
+                  w-100
+                  h-100
+                  top-0
+                  gx-0
+                  position-absolute
+                  justify-content-center
+                "
+              >
+                <div class="container_bottom position-relative">
+                  <div class="artist card_title">
+                    {{ item.name }}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+        </div>
       </div>
       <div v-else class="artist_cards_wrap d-flex top-0 overflow-auto">
         <div
@@ -128,32 +126,35 @@
           </div>
         </div>
         <div
-        class="
-          button
-          row
-          justify-content-between
-          w-100
-          h-100
-          top-0
-          gx-0
-          position-absolute
-        "
+          class="
+            button
+            row
+            justify-content-between
+            w-100
+            h-100
+            top-0
+            gx-0
+            position-absolute
+          "
         >
-        <div class="col-1">
-          <!-- Scroll Left -->
-          <div class="prev" @mouseover="scroll(-1)" @mouseleave="stopScroll()">
-            &#10094;
+          <div class="col-1">
+            <!-- Scroll Left -->
+            <div
+              class="prev"
+              @mouseover="scroll(-1)"
+              @mouseleave="stopScroll()"
+            >
+              &#10094;
+            </div>
           </div>
-        </div>
-        <div class="col-1">
-          <!-- Scroll Right -->
-          <div class="next" @mouseover="scroll(1)" @mouseleave="stopScroll()">
-            &#10095;
+          <div class="col-1">
+            <!-- Scroll Right -->
+            <div class="next" @mouseover="scroll(1)" @mouseleave="stopScroll()">
+              &#10095;
+            </div>
           </div>
         </div>
       </div>
-      </div>
-
     </div>
 
     <Footer></Footer>
@@ -162,7 +163,6 @@
 
 <script>
 import axios from "axios";
-import Home from "./Home.vue";
 import Header from "./Header.vue";
 import Footer from "./Footer.vue";
 
@@ -194,26 +194,27 @@ export default {
     });
   },
   methods: {
-    getTopTrack: function (limit, time_range) {
-      if (limit > 50 || limit < 1) return;
-      var access_token = localStorage.getItem("access_token");
-      const header = {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + access_token,
+    getTopTrack: function (limit_arg, time_range_arg) {
+      if (limit_arg > 50 || limit_arg < 1) return;
+      
+      var access_token = this.$store.getters.getAccessToken;
+
+      const params = {
+        access_token: access_token,
+        limit: limit_arg,
+        time_range: time_range_arg,
       };
-      var url = `https://api.spotify.com/v1/me/top/artists?limit=${limit}&time_range=${time_range}`;
-      axios
-        .get(url, { headers: header })
-        .then((response) => {
-          if (response.status == 200) {
-            console.log(response.data.items);
+
+      axios(`http://localhost:3000/artist?`, { params : params})
+      .then(response => {
+
+          if (response.status == 200){
             this.artists = response.data.items;
-            this.artist_count = limit;
+            this.artist_count = limit_arg;
           }
-        })
-        .catch(() => {
-          Home.methods.fetchRefreshToken();
-        });
+      })
+
+
     },
     showInfo: function (item) {
       //    window.open(
@@ -337,9 +338,6 @@ select {
   font-size: 1.6rem;
   padding-bottom: 10px;
 }
-
-
-
 
 .top_track_inner_container:hover > .emoji_downward {
   animation: arrow_pointing 250ms;
