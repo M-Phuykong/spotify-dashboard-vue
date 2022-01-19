@@ -165,32 +165,35 @@
         </div>
 
         <div
-        class="
-          button
-          row
-          justify-content-between
-          w-100
-          h-100
-          top-0
-          gx-0
-          position-absolute
-        "
-      >
-        <div class="col-1">
-          <!-- Scroll Left -->
-          <div class="prev" @mouseover="scroll(-1)" @mouseleave="stopScroll()">
-            &#10094;
+          class="
+            button
+            row
+            justify-content-between
+            w-100
+            h-100
+            top-0
+            gx-0
+            position-absolute
+          "
+        >
+          <div class="col-1">
+            <!-- Scroll Left -->
+            <div
+              class="prev"
+              @mouseover="scroll(-1)"
+              @mouseleave="stopScroll()"
+            >
+              &#10094;
+            </div>
           </div>
-        </div>
-        <div class="col-1">
-          <!-- Scroll Right -->
-          <div class="next" @mouseover="scroll(1)" @mouseleave="stopScroll()">
-            &#10095;
+          <div class="col-1">
+            <!-- Scroll Right -->
+            <div class="next" @mouseover="scroll(1)" @mouseleave="stopScroll()">
+              &#10095;
+            </div>
           </div>
         </div>
       </div>
-      </div>
-
     </div>
 
     <Footer></Footer>
@@ -199,7 +202,6 @@
 
 <script>
 import axios from "axios";
-import Home from "./Home.vue";
 import Header from "./Header.vue";
 import Footer from "./Footer.vue";
 
@@ -227,33 +229,35 @@ export default {
     this.$nextTick(function () {
       // this.getNextTrack();
 
-      var track_length_selector = document.getElementById("track_length_selector");
+      var track_length_selector = document.getElementById(
+        "track_length_selector"
+      );
       track_length_selector.addEventListener("change", () => {
         this.period = track_length_selector.value;
       });
     });
   },
   methods: {
-    getTopTrack: function (limit, time_range) {
-      if (limit > 50 || limit < 1) return;
-      var access_token = localStorage.getItem("access_token");
-      const header = {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + access_token,
+    getTopTrack: function (limit_arg, time_range_arg) {
+      
+      if (limit_arg > 50 || limit_arg < 1) return;
+
+      var access_token = this.$store.getters.getAccessToken;
+      
+      const params = {
+        access_token: access_token,
+        limit: limit_arg,
+        time_range: time_range_arg,
       };
-      var url = `https://api.spotify.com/v1/me/top/tracks?limit=${limit}&time_range=${time_range}`;
-      axios
-        .get(url, { headers: header })
-        .then((response) => {
-          if (response.status == 200) {
+      
+      axios(`http://localhost:3000/track?`, { params : params})
+      .then(response => {
+
+          if (response.status == 200){
             this.tracks = response.data.items;
-            this.tmptracks = response.data.items;
-            this.track_count = limit;
+            this.track_count = limit_arg
           }
-        })
-        .catch(() => {
-          Home.methods.fetchRefreshToken();
-        });
+      })
     },
     showInfo: function (item) {
       //    window.open(
@@ -554,7 +558,11 @@ img {
   height: 100%;
   padding: 13% 32px 13% 10px;
   color: #1db954;
-  background: linear-gradient(90deg, rgba(0,0,0,0.8690828382134104) 0%, rgba(43,43,43,0) 78%);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.8690828382134104) 0%,
+    rgba(43, 43, 43, 0) 78%
+  );
   font-weight: bold;
   font-size: 25px;
   transition: 0.6s ease;
@@ -563,7 +571,11 @@ img {
 .next {
   right: 0;
   padding: 13% 10px 13% 32px;
-  background: linear-gradient(-90deg, rgba(0,0,0,0.8690828382134104) 0%, rgba(43,43,43,0) 78%);
+  background: linear-gradient(
+    -90deg,
+    rgba(0, 0, 0, 0.8690828382134104) 0%,
+    rgba(43, 43, 43, 0) 78%
+  );
 }
 
 @keyframes arrow_pointing {

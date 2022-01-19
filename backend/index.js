@@ -25,8 +25,14 @@ app.get('/login', (req, res) => {
   
   callAuthorizationApi(qs.stringify(req.query))
   .then(respond => res.send(respond))
-  // console.log(code_object)
-  // res.send(code_object)
+
+})
+
+app.get('/refresh', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
+  
+  getRefreshToken(qs.stringify(req.query))
+  .then(respond => res.send(respond))
 })
 
 app.get('/user', (req, res) => {
@@ -34,12 +40,23 @@ app.get('/user', (req, res) => {
   
   getUser(qs.stringify(req.query))
   .then(response => {
-    if (response.status == 200) {
-        res.send(response.data)
-    }
+    res.send(response.data)
   })
 
 })
+
+app.get('/track', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
+  
+  getTrack(req.query.access_token, req.query.limit, req.query.time_range)
+  .then(response => {
+    res.send(response.data)
+  })
+
+})
+
+
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
@@ -65,7 +82,24 @@ async function getUser(access_token){
   
 }
 
+async function getTrack(access_token, limit, time_range){
 
+    const header = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + access_token,
+    };
+    var url = `https://api.spotify.com/v1/me/top/tracks?limit=${limit}&time_range=${time_range}`;
+  
+  try {
+      const response = await axios.get(url, { headers: header });
+
+      return response
+  }
+  catch (err){
+      console.error(err);
+  }
+  
+}
 
 async function callAuthorizationApi(code){
 
@@ -81,6 +115,35 @@ async function callAuthorizationApi(code){
       code : code.slice(0,-1),
       redirect_uri: encodeURI(home_uri),
       grant_type: 'authorization_code',
+  };
+
+  try {
+    let res = await axios.post(
+          'https://accounts.spotify.com/api/token',
+          qs.stringify(data),
+          headers)
+
+    return res.data
+  }
+  catch (err) {
+      console.error(err);
+  }
+
+}
+
+async function getRefreshToken(refresh_code){
+
+  const headers = {
+      headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: 'Basic NjdkNTI1ZWQ1NjJkNDhkYTg2YjM5ZTRhMTBmNDhjNmY6YjY4MDIwZjhjZDA2NDJlOWE2MzEyYmJmYzFhYmU0NTA='
+      },
+  };
+
+  const data = {
+      refresh_token : refresh_code.slice(0,-1),
+      grant_type: 'refresh_token',
   };
 
   try {

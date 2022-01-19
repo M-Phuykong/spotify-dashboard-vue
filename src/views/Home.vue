@@ -56,25 +56,16 @@ export default {
     getUser: function () {
       var access_token = this.$store.getters.getAccessToken;
 
-      axios(`http://localhost:3000/user?${access_token}`)
-      .then(response => this.user = response.data)
-
-      // const header = {
-      //   "Content-Type": "application/json",
-      //   Authorization: "Bearer " + access_token,
-      // };
-      // var url = `https://api.spotify.com/v1/me`;
-      // axios
-      //   .get(url, { headers: header })
-      //   .then((response) => {
-      //     if (response.status == 200) {
-      //       this.user = response.data;
-      //       console.log(response.data);
-      //     }
-      //   })
-      //   .catch(() => {
-      //     this.fetchRefreshToken();
-      //   });
+      axios(`http://localhost:3000/user?${access_token}`).then(
+        (response) => {
+          if (response.status == 200){
+            this.user = response.data
+          }
+          else if (response.status == 401){
+            this.fetchRefreshToken()
+            this.getUser()
+          }
+        });
     },
 
     handleRedirect: function () {
@@ -102,35 +93,22 @@ export default {
       }
       return code;
     },
-
+  
     fetchRefreshToken: function () {
-      var refresh_token = localStorage.getItem("refresh_token");
-      let body = "grant_type=refresh_token";
-      body += "&refresh_token=" + refresh_token;
-      body += "&client_id=" + this.$client_id;
-      this.callAuthorizationApi(body);
-    },
 
-    callAuthorizationApi: function (body) {
-      let xhr = new XMLHttpRequest();
-      xhr.open("POST", "https://accounts.spotify.com/api/token", true);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.setRequestHeader(
-        "Authorization",
-        "Basic " + btoa(this.$client_id + ":" + this.$client_secret)
-      );
-      xhr.send(body);
-      xhr.onload = () => {
-        var data = JSON.parse(xhr.responseText);
-        if (data.access_token != undefined) {
-          this.$store.commit("setAccessToken", data.access_token);
+      let refresh_token = this.$store.getters.getRefreshToken;
+
+      axios(`http://localhost:3000/refresh?${refresh_token}`).then((response) => {
+        
+        if (response.data.access_token != undefined) {
+          this.$store.commit("setAccessToken", response.data.access_token);
         }
-        if (data.refresh_token != undefined) {
-          localStorage.setItem("refresh_token", data.refresh_token);
-          this.$store.commit("setRefreshToken", data.refresh_token);
+        if (response.data.refresh_token != undefined) {
+          this.$store.commit("setRefreshToken", response.data.refresh_token);
         }
-        this.getUser();
-      };
+
+      });
+     
     },
   },
 };
