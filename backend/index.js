@@ -134,7 +134,7 @@ async function callAuthorizationApi(code){
       headers: {
           Accept: 'application/json',
           'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: 'Basic NjdkNTI1ZWQ1NjJkNDhkYTg2YjM5ZTRhMTBmNDhjNmY6YjY4MDIwZjhjZDA2NDJlOWE2MzEyYmJmYzFhYmU0NTA='
+          Authorization: `Basic ${process.env.client_id_and_secret_base64}`
       },
   };
 
@@ -164,7 +164,7 @@ async function getRefreshToken(refresh_code){
       headers: {
           Accept: 'application/json',
           'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: 'Basic NjdkNTI1ZWQ1NjJkNDhkYTg2YjM5ZTRhMTBmNDhjNmY6YjY4MDIwZjhjZDA2NDJlOWE2MzEyYmJmYzFhYmU0NTA='
+          Authorization: `Basic ${process.env.client_id_and_secret_base64}`
       },
   };
 

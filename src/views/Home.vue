@@ -56,16 +56,14 @@ export default {
     getUser: function () {
       var access_token = this.$store.getters.getAccessToken;
 
-      axios(`http://localhost:3000/user?${access_token}`).then(
-        (response) => {
-          if (response.status == 200){
-            this.user = response.data
-          }
-          else if (response.status == 401){
-            this.fetchRefreshToken()
-            this.getUser()
-          }
-        });
+      axios(`http://localhost:3000/user?${access_token}`).then((response) => {
+        if (response.status == 200) {
+          this.user = response.data;
+        } else if (response.status == 401) {
+          this.fetchRefreshToken();
+          this.getUser();
+        }
+      });
     },
 
     handleRedirect: function () {
@@ -93,22 +91,20 @@ export default {
       }
       return code;
     },
-  
-    fetchRefreshToken: function () {
 
+    fetchRefreshToken: function () {
       let refresh_token = this.$store.getters.getRefreshToken;
 
-      axios(`http://localhost:3000/refresh?${refresh_token}`).then((response) => {
-        
-        if (response.data.access_token != undefined) {
-          this.$store.commit("setAccessToken", response.data.access_token);
+      axios(`http://localhost:3000/refresh?${refresh_token}`).then(
+        (response) => {
+          if (response.data.access_token != undefined) {
+            this.$store.commit("setAccessToken", response.data.access_token);
+          }
+          if (response.data.refresh_token != undefined) {
+            this.$store.commit("setRefreshToken", response.data.refresh_token);
+          }
         }
-        if (response.data.refresh_token != undefined) {
-          this.$store.commit("setRefreshToken", response.data.refresh_token);
-        }
-
-      });
-     
+      );
     },
   },
 };
