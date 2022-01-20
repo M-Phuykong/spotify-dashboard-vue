@@ -7,7 +7,7 @@ dotenv.config()
 const app = express()
 const port = 3000
 
-const home_uri = "http://localhost:8080/home";
+const home_uri = "https://spotiboard.onrender.com/home";
 
 app.get('/', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*')
