@@ -35,7 +35,7 @@
           class="search_button"
           @click="getTopTrack(num_of_artist, period)"
         >
-          Retreive My Result!
+          <h6> Retrieve My Result! </h6>
         </button>
       </div>
     </div>
@@ -51,7 +51,7 @@
       <div class="top_track_inner_container d-flex">
         <div class="emoji_downward">&#9196;</div>
         <div class="title">
-          <h1>Top {{ artist_count }} Artists</h1>
+          <h1>Top <a class="title_track_count_number">{{ artist_count }}</a> Artists</h1>
         </div>
         <div class="emoji_downward">&#9196;</div>
       </div>
@@ -196,7 +196,7 @@ export default {
   methods: {
     getTopTrack: function (limit_arg, time_range_arg) {
       if (limit_arg > 50 || limit_arg < 1) return;
-      
+
       var access_token = this.$store.getters.getAccessToken;
 
       const params = {
@@ -205,16 +205,14 @@ export default {
         time_range: time_range_arg,
       };
 
-      axios(`http://localhost:3000/artist?`, { params : params})
-      .then(response => {
-
-          if (response.status == 200){
+      axios(`${this.$backend_url}/artist?`, { params: params }).then(
+        (response) => {
+          if (response.status == 200) {
             this.artists = response.data.items;
             this.artist_count = limit_arg;
           }
-      })
-
-
+        }
+      );
     },
     showInfo: function (item) {
       //    window.open(

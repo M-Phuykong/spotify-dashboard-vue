@@ -34,6 +34,7 @@
 import axios from "axios";
 import Header from "./Header.vue";
 import Footer from "./Footer.vue";
+
 export default {
   name: "Home",
   components: {
@@ -56,7 +57,7 @@ export default {
     getUser: function () {
       var access_token = this.$store.getters.getAccessToken;
 
-      axios(`http://localhost:3000/user?${access_token}`).then((response) => {
+      axios(`${this.$backend_url}/user?${access_token}`).then((response) => {
         if (response.status == 200) {
           this.user = response.data;
         } else if (response.status == 401) {
@@ -69,7 +70,7 @@ export default {
     handleRedirect: function () {
       let code = this.getCode();
 
-      axios(`http://localhost:3000/login?${code}`).then((response) => {
+      axios(`${this.$backend_url}/login?${code}`).then((response) => {
         if (response.data.access_token != undefined) {
           this.$store.commit("setAccessToken", response.data.access_token);
         }
@@ -95,7 +96,7 @@ export default {
     fetchRefreshToken: function () {
       let refresh_token = this.$store.getters.getRefreshToken;
 
-      axios(`http://localhost:3000/refresh?${refresh_token}`).then(
+      axios(`${this.$backend_url}/refresh?${refresh_token}`).then(
         (response) => {
           if (response.data.access_token != undefined) {
             this.$store.commit("setAccessToken", response.data.access_token);

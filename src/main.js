@@ -7,7 +7,8 @@ import store from './store/auth';
 Vue.config.productionTip = false
 
 //constant for now
-Vue.prototype.$home_uri = "http://localhost:8080/home";
+Vue.prototype.$home_uri = "https://spotiboard.onrender.com/home";
+Vue.prototype.$backend_url = "http://localhost:3000"
 
 
 

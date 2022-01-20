@@ -48,7 +48,7 @@ app.get('/user', (req, res) => {
 app.get('/track', (req, res) => {
   res.set('Access-Control-Allow-Origin', '*')
   
-  getTrack(req.query.access_token, req.query.limit, req.query.time_range)
+  getTop(req.query.access_token, "tracks", req.query.limit, req.query.time_range)
   .then(response => {
     res.send(response.data)
   })
@@ -58,7 +58,7 @@ app.get('/track', (req, res) => {
 app.get('/artist', (req, res) => {
   res.set('Access-Control-Allow-Origin', '*')
   
-  getArtist(req.query.access_token, req.query.limit, req.query.time_range)
+  getTop(req.query.access_token, "artists", req.query.limit, req.query.time_range)
   .then(response => {
     res.send(response.data)
   })
@@ -90,13 +90,13 @@ async function getUser(access_token){
   
 }
 
-async function getTrack(access_token, limit, time_range){
+async function getTop(access_token, type, limit, time_range){
 
     const header = {
       "Content-Type": "application/json",
       Authorization: "Bearer " + access_token,
     };
-    var url = `https://api.spotify.com/v1/me/top/tracks?limit=${limit}&time_range=${time_range}`;
+    var url = `https://api.spotify.com/v1/me/top/${type}?limit=${limit}&time_range=${time_range}`;
   
   try {
       const response = await axios.get(url, { headers: header });
@@ -109,24 +109,6 @@ async function getTrack(access_token, limit, time_range){
   
 }
 
-async function getArtist(access_token, limit, time_range){
-
-    const header = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + access_token,
-    };
-    var url = `https://api.spotify.com/v1/me/top/artists?limit=${limit}&time_range=${time_range}`;
-  
-  try {
-      const response = await axios.get(url, { headers: header });
-
-      return response
-  }
-  catch (err){
-      console.error(err);
-  }
-  
-}
 
 async function callAuthorizationApi(code){
 

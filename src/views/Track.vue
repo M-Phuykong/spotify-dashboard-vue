@@ -2,7 +2,7 @@
   <div id="Track">
     <Header></Header>
 
-    <div class="track_configure_container container-fluid">
+    <!-- <div class="track_configure_container container-fluid">
       <div class="top_container d-flex justify-content-center">
         <h2>Top&nbsp;</h2>
 
@@ -35,10 +35,10 @@
           class="search_button"
           @click="getTopTrack(num_of_track, period)"
         >
-          Retreive My Result!
+          <h6>Retrieve My Result!</h6> 
         </button>
       </div>
-    </div>
+    </div> -->
 
     <div
       class="
@@ -47,11 +47,12 @@
         d-flex
         justify-content-center
       "
+      style="margin-top: 4%"
     >
       <div class="top_track_inner_container d-flex">
         <div class="emoji_downward">&#9196;</div>
         <div class="title">
-          <h1>Top {{ track_count }} Tracks</h1>
+          <h1>Top <a class="title_track_count_number">{{ track_count }}</a> Tracks</h1>
         </div>
         <div class="emoji_downward">&#9196;</div>
       </div>
@@ -250,7 +251,7 @@ export default {
         time_range: time_range_arg,
       };
       
-      axios(`http://localhost:3000/track?`, { params : params})
+      axios(`${this.$backend_url}/track?`, { params : params})
       .then(response => {
 
           if (response.status == 200){
@@ -330,6 +331,12 @@ body {
 }
 
 /* Track Input CSS Part */
+
+.title_track_count_number{
+  color: rgba(255, 255, 0, 0.856);
+  text-decoration: none;
+  pointer-events: none;
+}
 
 .track_group_form {
   position: relative;
@@ -423,8 +430,17 @@ body {
 }
 
 .search_button {
-  margin-top: 2%;
-  margin-bottom: 2%;
+  background: black;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.search_button:hover{
+  animation: arrow_pointing 250ms;
+  animation-timing-function: cubic-bezier(0.2, 0.65, 0.6, 1);
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 img {
