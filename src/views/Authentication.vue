@@ -36,7 +36,7 @@ export default {
 
   methods: {
     requestAuthorization: function () {
-      axios("http://localhost:3000/").then((response) => {
+      axios(`${this.$backend_url}`).then((response) => {
         window.location.href = response.data;
       });
     },
