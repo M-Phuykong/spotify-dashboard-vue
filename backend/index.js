@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
     url += "&redirect_uri=" + encodeURI(home_uri);
     url += "&show_dialog=true";
     url += "&scope=user-read-private user-top-read user-read-email";
-    res.send(url)
+    res.send(url)  
 })
 
 app.get('/login', (req, res) => {
