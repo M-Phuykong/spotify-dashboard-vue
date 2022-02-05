@@ -8,9 +8,7 @@ Vue.config.productionTip = false
 
 //constant for now
 Vue.prototype.$home_uri = "https://spotiboard.onrender.com/home";
-Vue.prototype.$backend_url = "https://ec2-54-242-212-1.compute-1.amazonaws.com:3000/"
-
-
+Vue.prototype.$backend_url = "https://spotiboard-backend-dhys.onrender.com"
 
 
 new Vue({
