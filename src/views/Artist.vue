@@ -186,7 +186,7 @@ export default {
     };
   },
   beforeMount() {
-    this.getTopTrack(20, "medium_term");
+    this.getTopArtist(20, "medium_term");
   },
   mounted() {
     this.$nextTick(function () {
