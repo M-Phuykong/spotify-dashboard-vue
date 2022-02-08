@@ -60,6 +60,7 @@ export default {
       axios(`${this.$backend_url}/user?${access_token}`).then((response) => {
         if (response.status == 200) {
           this.user = response.data;
+          console.log(response.data);
         } else if (response.status == 401) {
           this.fetchRefreshToken();
           this.getUser();

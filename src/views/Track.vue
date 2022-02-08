@@ -52,7 +52,9 @@
       <div class="top_track_inner_container d-flex">
         <div class="emoji_downward">&#9196;</div>
         <div class="title">
-          <h1>Top <a class="title_track_count_number">{{ track_count }}</a> Tracks</h1>
+          <h1>
+            Top <a class="title_track_count_number">{{ track_count }}</a> Tracks
+          </h1>
         </div>
         <div class="emoji_downward">&#9196;</div>
       </div>
@@ -240,25 +242,24 @@ export default {
   },
   methods: {
     getTopTrack: function (limit_arg, time_range_arg) {
-      
       if (limit_arg > 50 || limit_arg < 1) return;
 
       var access_token = this.$store.getters.getAccessToken;
-      
+
       const params = {
         access_token: access_token,
         limit: limit_arg,
         time_range: time_range_arg,
       };
-      
-      axios(`${this.$backend_url}/track?`, { params : params})
-      .then(response => {
 
-          if (response.status == 200){
+      axios(`${this.$backend_url}/track?`, { params: params }).then(
+        (response) => {
+          if (response.status == 200) {
             this.tracks = response.data.items;
-            this.track_count = limit_arg
+            this.track_count = limit_arg;
           }
-      })
+        }
+      );
     },
     showInfo: function (item) {
       //    window.open(
@@ -332,7 +333,7 @@ body {
 
 /* Track Input CSS Part */
 
-.title_track_count_number{
+.title_track_count_number {
   color: rgba(255, 255, 0, 0.856);
   text-decoration: none;
   pointer-events: none;
@@ -436,7 +437,7 @@ body {
   border-radius: 5px;
 }
 
-.search_button:hover{
+.search_button:hover {
   animation: arrow_pointing 250ms;
   animation-timing-function: cubic-bezier(0.2, 0.65, 0.6, 1);
   animation-iteration-count: infinite;

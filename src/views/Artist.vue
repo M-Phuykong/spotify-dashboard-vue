@@ -33,9 +33,9 @@
       <div class="botton_container d-flex justify-content-center">
         <button
           class="search_button"
-          @click="getTopTrack(num_of_artist, period)"
+          @click="getTopArtist(num_of_artist, period)"
         >
-          <h6> Retrieve My Result! </h6>
+          <h6>Retrieve My Result!</h6>
         </button>
       </div>
     </div>
@@ -51,7 +51,10 @@
       <div class="top_track_inner_container d-flex">
         <div class="emoji_downward">&#9196;</div>
         <div class="title">
-          <h1>Top <a class="title_track_count_number">{{ artist_count }}</a> Artists</h1>
+          <h1>
+            Top
+            <a class="title_track_count_number">{{ artist_count }}</a> Artists
+          </h1>
         </div>
         <div class="emoji_downward">&#9196;</div>
       </div>
@@ -194,7 +197,7 @@ export default {
     });
   },
   methods: {
-    getTopTrack: function (limit_arg, time_range_arg) {
+    getTopArtist: function (limit_arg, time_range_arg) {
       if (limit_arg > 50 || limit_arg < 1) return;
 
       var access_token = this.$store.getters.getAccessToken;
