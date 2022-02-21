@@ -65,6 +65,13 @@ app.get('/artist', (req, res) => {
 
 })
 
+app.get('/artist1', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
+  
+  let a = "falwfkejafe"
+  res(a)
+})
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
