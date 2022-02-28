@@ -46,7 +46,7 @@ export default {
       user: [],
     };
   },
-  mounted() {
+  created() {
     if (window.location.search.length > 0) {
       this.handleRedirect();
     } else {
@@ -158,7 +158,7 @@ img {
   /* cursor: pointer; */
 }
 .profile_card img {
-  opacity: 90%;
+  opacity: 0.9;
   transition: all 0.15s linear;
 }
 .profile_card .profile_name {

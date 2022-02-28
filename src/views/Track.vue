@@ -47,7 +47,6 @@
         d-flex
         justify-content-center
       "
-      style="margin-top: 4%"
     >
       <div class="top_track_inner_container d-flex">
         <div class="emoji_downward">&#9196;</div>
