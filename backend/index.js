@@ -49,7 +49,7 @@ app.get('/user', (req, res) => {
 app.get('/track', (req, res) => {
   res.set('Access-Control-Allow-Origin', '*')
   
-  getTop(req.query.access_token, "artists", req.query.limit, req.query.time_range)
+  getTop(req.query.access_token, "tracks", req.query.limit, req.query.time_range)
   .then(response => {
     res.send(response.data)
   })
