@@ -46,7 +46,7 @@ export default {
       user: [],
     };
   },
-  created() {
+  mounted() {
     if (window.location.search.length > 0) {
       this.handleRedirect();
     } else {

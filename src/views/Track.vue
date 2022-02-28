@@ -2,7 +2,7 @@
   <div id="Track">
     <Header></Header>
 
-    <!-- <div class="track_configure_container container-fluid">
+    <div class="track_configure_container container-fluid">
       <div class="top_container d-flex justify-content-center">
         <h2>Top&nbsp;</h2>
 
@@ -35,10 +35,10 @@
           class="search_button"
           @click="getTopTrack(num_of_track, period)"
         >
-          <h6>Retrieve My Result!</h6> 
+          <h6>Retrieve My Result!</h6>
         </button>
       </div>
-    </div> -->
+    </div>
 
     <div
       class="
