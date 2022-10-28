@@ -10,7 +10,6 @@ Vue.config.productionTip = false
 Vue.prototype.$home_uri = "https://spotiboard.onrender.com/home";
 Vue.prototype.$backend_url = "https://spotify-dashboard-backend.herokuapp.com"
 
-
 new Vue({
   router,
   store,
